@@ -24,7 +24,7 @@ public class Reduce {
         // soma
         // Associativa (n+n)+ (n+n)+ (n+n)
         List<Integer> reduces = Arrays.asList(1,2,5,9);
-        int result = reduces.stream().reduce(0, (subtotal, element) -> subtotal + element);
+        int result = reduces.stream().reduce(0, Integer::sum);
         System.out.println("Reduce total soma:"+result);
 
 
@@ -65,16 +65,16 @@ public class Reduce {
 
        
         // Reduce menor valor
-        OptionalDouble c = DoubleStream.of(12.3,2.5).reduce((d1,d2)->Math.min(d1, d2));
+        OptionalDouble c = DoubleStream.of(12.3,2.5).reduce(Math::min);
         System.out.println("Menor valor sem identidade"+c);
 
         // Reduce menor valor
-        Double c1 = DoubleStream.of(12.3,2.5).reduce(Double.POSITIVE_INFINITY,(d1,d2)->Math.min(d1, d2));
+        double c1 = DoubleStream.of(12.3,2.5).reduce(Double.POSITIVE_INFINITY, Math::min);
         System.out.println("Menor valor com identidade"+c1);
 
         // Reduce com função de combinação
         // Função combinação é chamada quando ele divide em várias partes o stream
-        int combinacao = reduces.stream().reduce(0, (subtotal, element) -> subtotal + element,(subtotal, element) -> subtotal + element);
+        int combinacao = reduces.stream().reduce(0, Integer::sum, Integer::sum);
         System.out.println("Reduce combinação:"+combinacao);
 
         // Reduce map = combiner transforma em string
@@ -84,9 +84,9 @@ public class Reduce {
         //.map(n1->n1.toString())
         .reduce("", 
             // função de acumulação
-            (subtotal, element) -> subtotal.toString().concat(element.toString()),
+            (subtotal, element) -> subtotal.concat(element.toString()),
             // função de combinação
-            (subtotal, element) -> subtotal.concat(element));
+                String::concat);
         System.out.println("Reduce map = combiner transforma em string:"+combinacao2); 
 
         // Reduce para trabalhar com objetos imutáveis
